@@ -1,0 +1,112 @@
+<?php
+
+/**
+ * @file
+ * Contains link_alter.module.
+ */
+
+use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function link_alter_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the link_alter module.
+    case 'help.page.link_alter':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Alter menu links by inserting text or HTML code.') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function link_alter_form_menu_link_content_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $menu_link = $form_state->getFormObject()->getEntity();
+  $menu_link_options = $menu_link->link->first()->options ?: [];
+
+  $form['link_alter'] = [
+    '#type' => 'details',
+    '#title' => t('Alter link text'),
+    '#weight' => 50,
+    '#open' => TRUE,
+  ];
+
+  $form['link_alter']['html'] = [
+    '#type' => 'textfield',
+    '#title' => t('HTML'),
+    '#description' => t('For example:') . Html::escape('<i class="fas fa-home"></i>'),
+    '#default_value' => !empty($menu_link_options['html']) ? $menu_link_options['html'] : '',
+  ];
+
+  $form['link_alter']['position'] = [
+    '#type' => 'select',
+    '#title' => t('Position'),
+    '#default_value' => !empty($menu_link_options['position']) ? $menu_link_options['position'] : 'before',
+    '#options' => [
+      'before' => t('Insert HTML before link text'),
+      'after' => t('Insert HTML after link text'),
+      'only' => t('Remove link text and insert HTML'),
+    ],
+  ];
+
+  $form['actions']['submit']['#submit'][] = 'link_alter_menu_link_content_form_submit';
+}
+
+/**
+ * Process the submitted form.
+ *
+ * @param array $form
+ *   Form Array.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   Form State Interface.
+ */
+function link_alter_menu_link_content_form_submit(array $form, FormStateInterface $form_state) {
+  $html = $form_state->getValue('html');
+  $position = $form_state->getValue('position');
+
+  $options = [
+    'html' => $html ?: '',
+    'position' => $position ?: 'before',
+  ];
+
+  /** @var \Drupal\menu_link_content\Entity\MenuLinkContent $menu_link */
+  $menu_link = $form_state->getFormObject()->getEntity();
+  $menu_link_options = $menu_link->link->first()->options;
+
+  $merged = array_merge($menu_link_options, $options);
+  $menu_link->link->first()->options = $merged;
+  $menu_link->save();
+}
+
+/**
+ * Implements hook_link_alter().
+ */
+function link_alter_link_alter(&$variables) {
+  if (!empty($variables['options']['html'])) {
+    $html = $variables['options']['html'];
+    $position = $variables['options']['position'];
+
+    if ($position == 'before') {
+      $variables['text'] = new FormattableMarkup($html . ' @title', [
+        '@title' => $variables['text'],
+      ]);
+    }
+    elseif($position == 'after') {
+      $variables['text'] = new FormattableMarkup('@title' . $html, [
+        '@title' => $variables['text'],
+      ]);
+    }
+    else {
+      $variables['text'] = new FormattableMarkup($html, []);
+    }
+  }
+}

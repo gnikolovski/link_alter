@@ -1,0 +1,23 @@
+{
+    "name": "gnikolovski/link_alter",
+    "type": "drupal-module",
+    "description": "Alter menu links by inserting text or HTML code.",
+    "keywords": [
+        "Drupal"
+    ],
+    "license": "GPL-2.0+",
+    "homepage": "http://gorannikolovski.com",
+    "authors": [
+        {
+            "name": "Goran Nikolovski",
+            "email": "nikolovski84@gmail.com",
+            "homepage": "http://gorannikolovski.com",
+            "role": "Developer"
+        }
+    ],
+    "minimum-stability": "dev",
+    "support": {
+        "issues": "https://github.com/gnikolovski/link_alter/issues"
+    },
+    "require": {}
+}
