@@ -1,4 +1,4 @@
-name: 'Link alter'
+name: 'Link Alter'
 type: module
 description: 'Alter menu links by inserting text or HTML code.'
 core: 8.x
