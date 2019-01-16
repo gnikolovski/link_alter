@@ -101,7 +101,7 @@ function link_alter_link_alter(&$variables) {
       ]);
     }
     elseif($position == 'after') {
-      $variables['text'] = new FormattableMarkup('@title' . $html, [
+      $variables['text'] = new FormattableMarkup('@title ' . $html, [
         '@title' => $variables['text'],
       ]);
     }
