@@ -22,6 +22,8 @@ where you want to insert the text and hit the "Save button".
 NOTE: you cannot use this module to alter links provided by modules, like the
 logout link in the user account menu.
 
+Blog post: http://dev.studiopresent.com/blog/back-end/altering-menu-links
+
 
 REQUIREMENTS
 ------------
