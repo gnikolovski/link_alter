@@ -100,7 +100,7 @@ function link_alter_link_alter(&$variables) {
         '@title' => $variables['text'],
       ]);
     }
-    elseif($position == 'after') {
+    elseif ($position == 'after') {
       $variables['text'] = new FormattableMarkup('@title ' . $html, [
         '@title' => $variables['text'],
       ]);
