@@ -2,4 +2,5 @@ name: 'Link Alter'
 type: module
 description: 'Alter menu links by inserting text or HTML code.'
 core: 8.x
+core_version_requirement: ^8 || ^9
 package: 'Menu'
