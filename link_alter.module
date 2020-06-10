@@ -43,7 +43,7 @@ function link_alter_form_menu_link_content_form_alter(&$form, FormStateInterface
   $form['link_alter']['html'] = [
     '#type' => 'textfield',
     '#title' => t('HTML'),
-    '#description' => t('For example:') . Html::escape('<i class="fas fa-home"></i>'),
+    '#description' => t('For example:') . Html::escape(' <i class="fas fa-home"></i>'),
     '#default_value' => !empty($menu_link_options['html']) ? $menu_link_options['html'] : '',
   ];
 
